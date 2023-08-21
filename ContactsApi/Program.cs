@@ -1,4 +1,6 @@
 using ContactsApi.Data;
+using ContactsApi.Data.Interfaces;
+using ContactsApi.Services.Contacts;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,6 +14,7 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<ContactsAPIDbContext>(option =>
 option.UseInMemoryDatabase("ContactsDb"));
+builder.Services.AddScoped<ITaskRepositoryContact, InMemoryContactRepository>();
 
 var app = builder.Build();
 

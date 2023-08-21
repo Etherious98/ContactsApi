@@ -7,5 +7,14 @@ namespace ContactsApi.Data
     {
         public ContactsAPIDbContext(DbContextOptions options) : base(options) { }
         public DbSet<Contact> Contacts{ get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Contact>().HasKey(u => new
+            {
+                u.Email,
+                //u.PhoneNumber
+            });
+        }
     }
 }
