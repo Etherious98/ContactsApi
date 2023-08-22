@@ -18,10 +18,10 @@ namespace ContactsApi.Controllers.Contacts
         }
 
         /// <summary>
-        /// Busca un usuario por su dirección de correo electrónico o número telefónico.
+        /// Busca un contacto por su dirección de correo electrónico o número telefónico.
         /// </summary>
         /// <param name="search">Dirección de correo electrónico o número telefónico del usuario.</param>
-        /// <returns>El usuario encontrado o NotFound si no se encuentra.</returns>
+        /// <returns>El contacto encontrado o NotFound si no se encuentra.</returns>
         [HttpGet]
         [Route("{search}")]
         public async Task<IActionResult> GetContact([FromRoute] string search)
@@ -129,6 +129,7 @@ namespace ContactsApi.Controllers.Contacts
             }
             
         }
+
         /// <summary>
         /// Elimina un contacto existente relacionado al email ingresado
         /// </summary>

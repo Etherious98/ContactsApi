@@ -8,6 +8,7 @@ namespace ContactsApi.Services.Contacts
     public class InMemoryContactRepository : ITaskRepositoryContact
     {
         private readonly ContactsAPIDbContext dbContext;
+
         public InMemoryContactRepository(ContactsAPIDbContext dbContext)
         {
             this.dbContext = dbContext;
@@ -36,6 +37,7 @@ namespace ContactsApi.Services.Contacts
             var contactList = await dbContext.Contacts.ToListAsync();
             return contactList.Where(c => c.Address.Contains(address));
         }
+
         public async Task Add(Contact contact)
         {
             try

@@ -12,6 +12,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+//Se utiliza DB en memoria pero se preparó para poder extenderse a SQL o noSQL
 builder.Services.AddDbContext<ContactsAPIDbContext>(option =>
 option.UseInMemoryDatabase("ContactsDb"));
 builder.Services.AddScoped<ITaskRepositoryContact, InMemoryContactRepository>();
