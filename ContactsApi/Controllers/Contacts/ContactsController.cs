@@ -17,7 +17,37 @@ namespace ContactsApi.Controllers.Contacts
             _repositoryContact = taskRepositoryContact;
         }
 
+        /// <summary>
+        /// Busca un usuario por su dirección de correo electrónico o número telefónico.
+        /// </summary>
+        /// <param name="search">Dirección de correo electrónico o número telefónico del usuario.</param>
+        /// <returns>El usuario encontrado o NotFound si no se encuentra.</returns>
         [HttpGet]
+        [Route("{search}")]
+        public async Task<IActionResult> GetContact([FromRoute] string search)
+        {
+            if (!string.IsNullOrEmpty(search))
+            {
+                if (IsEmail(search))
+                {
+                    var contact = await _repositoryContact.GetByEmail(search);
+                    if (contact != null) return Ok(contact);
+                }
+                if (IsPhoneNumber(search))
+                {
+                    var contact = await _repositoryContact.GetByPhone(search);
+                    if (contact != null) return Ok(contact);
+                }
+            }
+            return NotFound();
+        }
+
+        /// <summary>
+        /// obtiene todos los contactos existentes.
+        /// </summary>
+        /// <returns>Una lista de todos los contactos encontrados.</returns>
+        [HttpGet]
+        [Route("GetAll")]
         public async Task<IActionResult> GetContacts()
         {
             var contacts = await _repositoryContact.GetAll();
@@ -28,6 +58,27 @@ namespace ContactsApi.Controllers.Contacts
             return NoContent();
         }
 
+        /// <summary>
+        /// obtiene todos los contactos existentes que coincida con la dirección.
+        /// </summary>
+        /// <param name="address">Dirección del usuario.</param>
+        /// <returns>Una lista de todos los contactos encontrados.</returns>
+        [HttpGet]
+        [Route("GetAll/{address}")]
+        public async Task<IActionResult> GetContactsByAddress([FromRoute] string address)
+        {
+            var contacts = await _repositoryContact.GetAllByAddress(address);
+            if (contacts.Any())
+            {
+                return Ok(contacts);
+            }
+            return NoContent();
+        }
+
+        // <summary>
+        /// Crea un nuevo contacto.
+        /// </summary>
+        /// <param name="addContactRequest">Datos del nuevo contacto.</param>
         [HttpPost]
         public async Task<IActionResult> AddContact(Contact addContactRequest)
         {
@@ -50,28 +101,11 @@ namespace ContactsApi.Controllers.Contacts
             
         }
 
-        [HttpGet]
-        [Route("{search}")]
-        public async Task<IActionResult> GetContact([FromRoute] string search)
-        {
-            if (!string.IsNullOrEmpty(search))
-            {
-                if (IsEmail(search))
-                {
-                    var contact = await _repositoryContact.GetByEmail(search);
-                    if (contact != null) return Ok(contact);
-                }
-                if (IsPhoneNumber(search))
-                {
-                    var contact = await _repositoryContact.GetByPhone(search);
-                    if (contact != null) return Ok(contact);
-                }
-            }
-            return NotFound();
-        }
-
+        // <summary>
+        /// Actualiza un contacto existente.
+        /// </summary>
+        /// <param name="addContactRequest">Datos del contacto.</param>
         [HttpPut]
-        [Route("{email}")]
         public async Task<IActionResult> UpdateContact(Contact updateContactRequest)
         {
             try
@@ -95,10 +129,14 @@ namespace ContactsApi.Controllers.Contacts
             }
             
         }
-
+        /// <summary>
+        /// Elimina un contacto existente relacionado al email ingresado
+        /// </summary>
+        /// <param name="email"></param>
+        /// <returns></returns>
         [HttpDelete]
         [Route("{email}")]
-        public async Task<IActionResult> DeleteContact(string email)
+        public async Task<IActionResult> DeleteContact([FromRoute] string email)
         {
             try
             {

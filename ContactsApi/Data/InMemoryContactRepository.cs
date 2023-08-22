@@ -29,7 +29,13 @@ namespace ContactsApi.Services.Contacts
         {
             return await dbContext.Contacts.ToListAsync();
         }
+        
+        public async Task<IEnumerable<Contact>> GetAllByAddress(string address)
+        {
 
+            var contactList = await dbContext.Contacts.ToListAsync();
+            return contactList.Where(c => c.Address.Contains(address));
+        }
         public async Task Add(Contact contact)
         {
             try
